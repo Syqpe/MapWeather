@@ -1,0 +1,25 @@
+// prettier-ignore
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",     /* Recommended React Native TSConfig base */
+  "compilerOptions": {
+      "useDefineForClassFields": true,
+      "allowJs": false,
+      "skipLibCheck": true,
+      "esModuleInterop": false,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noEmit": true,
+      "paths": {
+          "@components/*": ["./src/shared/components/index.tsx"],
+          "@API/*": ["./src/app/api/index.ts"],
+          "@pages/*": ["./src/pages/index.tsx"],
+          "@utils/*": ["./src/shared/utils/index.ts"],
+          "@localtypes/*": ["./src/shared/types/index.ts"],
+          "@hooks/*": ["./src/shared/hooks/index.tsx"]
+      }
+  },
+  "include": ["src"],
+}
