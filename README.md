@@ -1,6 +1,6 @@
-# Amazing breeds
+# Map Weather App
 
-<img src="https://user-images.githubusercontent.com/83192247/127578929-6149b7d2-410f-4843-aad4-c7b213fcc018.png" align="center"
+<img src="https://ane4bf-datap1.s3-eu-west-1.amazonaws.com/wmocms/s3fs-public/styles/featured_media_detail/public/news/featured_media/20150428_03e.png?V1RJ2xZ9EZJ5PeeMM.9k1.BJr0POAqZb&itok=xwUKYU4_" align="center"
      alt="Dog is smiling" width="600" height="400">
 
 This is a small app for showing amazing dog breeds. There are many different dogs and their sub-breeds, I hope you can enjoy their beauty.
