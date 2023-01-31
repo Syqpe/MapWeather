@@ -14,16 +14,24 @@ module.exports = {
                     ".tsx",
                     ".json",
                 ],
-                alias: {
-                    "@components":
-                        "./src/shared/components/index.tsx",
-                    "@API": "./src/app/api/index.ts",
-                    "@pages": "./src/pages/index.tsx",
-                    "@utils": "./src/shared/utils/index.ts",
-                    "@localtypes":
-                        "./src/shared/types/index.ts",
-                    "@hooks": "./src/shared/hooks/index.ts",
-                },
+                alias: [
+                    {
+                        "@components":
+                            "./src/shared/components",
+                    },
+                    {
+                        "@hooks": "./src/shared/hooks",
+                    },
+                    {
+                        "@utils": "./src/shared/utils",
+                    },
+                    {
+                        "@localtypes": "./src/shared/types",
+                    },
+                    { "@pages": "./src/pages" },
+                    { "@app": "./src/app" },
+                    { "@API": "./src/app/api/index.ts" },
+                ],
             },
         ],
     ],

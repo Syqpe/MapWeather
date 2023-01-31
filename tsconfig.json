@@ -13,12 +13,13 @@
       "isolatedModules": true,
       "noEmit": true,
       "paths": {
-          "@components/*": ["./src/shared/components/index.tsx"],
-          "@API/*": ["./src/app/api/index.ts"],
-          "@pages/*": ["./src/pages/index.tsx"],
-          "@utils/*": ["./src/shared/utils/index.ts"],
-          "@localtypes/*": ["./src/shared/types/index.ts"],
-          "@hooks/*": ["./src/shared/hooks/index.ts"]
+          "@components/*": ["./src/shared/components/*"],
+          "@hooks/*": ["./src/shared/hooks/*"],
+          "@localtypes/*": ["./src/shared/types/*"],
+          "@utils/*": ["./src/shared/utils/*"],
+          "@pages/*": ["./src/pages/*"],
+          "@app/*": ["./src/app/*"],
+          "@API": ["./src/app/api/index.ts"],
       }
   },
   "include": ["src"],
