@@ -1,34 +1,94 @@
-import { FC, lazy } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React from "react";
+import { Icon, useTheme } from "@rneui/themed";
+import {
+    NavigationContainer,
+    DefaultTheme,
+} from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { Suspense } from "@components/";
+import Home from "./home";
+import Settings from "./settings";
 
-import { Error } from "./error";
+const Tab = createBottomTabNavigator();
 
-const Home = lazy(() => import("./home"));
-const Whois = lazy(() => import("./whois"));
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: (
-            <Suspense>
-                <Home />
-            </Suspense>
-        ),
-        errorElement: <Error />,
-    },
-    {
-        path: "/whois",
-        element: (
-            <Suspense>
-                <Whois />
-            </Suspense>
-        ),
-        errorElement: <Error />,
-    },
-]);
-
-export const Routing: FC = function () {
-    return <RouterProvider router={router} />;
+const NavigationPage = {
+    Home: "Home",
+    Settings: "Settings",
 };
+
+const Navigation = () => {
+    const { theme } = useTheme();
+
+    return (
+        <NavigationContainer
+            theme={{
+                ...DefaultTheme,
+                colors: {
+                    ...DefaultTheme.colors,
+                    background: theme.colors.background,
+                },
+            }}
+        >
+            <Tab.Navigator
+                screenOptions={({ route }) => ({
+                    tabBarIcon: ({
+                        focused,
+                        color,
+                        size,
+                    }) => {
+                        let iconName: string = "";
+
+                        if (
+                            route.name ===
+                            NavigationPage.Home
+                        ) {
+                            iconName = focused
+                                ? "home"
+                                : "home-outline";
+                        } else if (
+                            route.name ===
+                            NavigationPage.Settings
+                        ) {
+                            iconName = focused
+                                ? "settings"
+                                : "settings-outline";
+                        }
+
+                        return (
+                            <Icon
+                                name={iconName}
+                                type="ionicon"
+                                size={size}
+                                color={color}
+                            />
+                        );
+                    },
+                    tabBarActiveTintColor:
+                        theme.colors.primary,
+                    tabBarInactiveTintColor:
+                        theme.colors.secondary,
+                    tabBarStyle: {
+                        backgroundColor:
+                            theme.colors.background,
+                    },
+                    headerStyle: {
+                        backgroundColor:
+                            theme.colors.background,
+                    },
+                })}
+            >
+                <Tab.Screen
+                    name={NavigationPage.Home}
+                    component={Home}
+                    options={{ headerShown: false }}
+                />
+                <Tab.Screen
+                    name={NavigationPage.Settings}
+                    component={Settings}
+                />
+            </Tab.Navigator>
+        </NavigationContainer>
+    );
+};
+
+export { Navigation };

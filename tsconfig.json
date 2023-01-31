@@ -18,7 +18,7 @@
           "@pages/*": ["./src/pages/index.tsx"],
           "@utils/*": ["./src/shared/utils/index.ts"],
           "@localtypes/*": ["./src/shared/types/index.ts"],
-          "@hooks/*": ["./src/shared/hooks/index.tsx"]
+          "@hooks/*": ["./src/shared/hooks/index.ts"]
       }
   },
   "include": ["src"],

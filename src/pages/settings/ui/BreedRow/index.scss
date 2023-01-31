@@ -1,0 +1,49 @@
+.breedrow {
+    margin-bottom: 8px;
+    padding: 8px 18px;
+    border: 1px solid rgb(237, 237, 237);
+    border-radius: 8px;
+
+    &:last-child {
+        margin: unset;
+    }
+
+    &:hover {
+        background-color: rgb(228, 228, 228);
+    }
+
+    &__inner {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__content {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+
+        &_images {
+            flex-direction: unset;
+        }
+    }
+
+    &__breed {
+    }
+
+    &__images {
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: space-between;
+        margin: 0 20px;
+    }
+
+    &__img {
+        width: 140px;
+        height: 140px;
+    }
+
+    &__children {
+        margin-top: 10px;
+        padding: 0 18px;
+    }
+}
