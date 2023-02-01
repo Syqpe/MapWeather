@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Icon, useTheme } from "@rneui/themed";
 import {
     NavigationContainer,
@@ -6,12 +6,17 @@ import {
 } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import Home from "./home";
-import Settings from "./settings";
+const Home = lazy(() => import("./home"));
+const Settings = lazy(() => import("./settings"));
 
 const Tab = createBottomTabNavigator();
 
-const NavigationPage = {
+interface IRoutes {
+    Home: string;
+    Settings: string;
+}
+
+const Routes: IRoutes = {
     Home: "Home",
     Settings: "Settings",
 };
@@ -38,16 +43,12 @@ const Navigation = () => {
                     }) => {
                         let iconName: string = "";
 
-                        if (
-                            route.name ===
-                            NavigationPage.Home
-                        ) {
+                        if (route.name === Routes.Home) {
                             iconName = focused
                                 ? "home"
                                 : "home-outline";
                         } else if (
-                            route.name ===
-                            NavigationPage.Settings
+                            route.name === Routes.Settings
                         ) {
                             iconName = focused
                                 ? "settings"
@@ -78,13 +79,14 @@ const Navigation = () => {
                 })}
             >
                 <Tab.Screen
-                    name={NavigationPage.Home}
+                    name={Routes.Home}
                     component={Home}
                     options={{ headerShown: false }}
                 />
                 <Tab.Screen
-                    name={NavigationPage.Settings}
+                    name={Routes.Settings}
                     component={Settings}
+                    options={{ headerShown: false }}
                 />
             </Tab.Navigator>
         </NavigationContainer>

@@ -1,8 +1,8 @@
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { Navigation } from "./pages";
-import { ThemeProvider } from "./app/theme";
+import { Navigation } from "@pages/index";
+import { ThemeProvider } from "@app/theme";
 
 const App = () => (
     <SafeAreaProvider>

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { View } from "react-native";
 import { Text, Button, useTheme } from "@rneui/themed";
-import { useThemeMode } from "../../shared/hooks";
+import { useThemeMode } from "@hooks/index";
 
 const Home: FC<{
     navigation: any;

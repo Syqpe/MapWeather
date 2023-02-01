@@ -4,7 +4,7 @@ import React, {
     PropsWithChildren,
 } from "react";
 
-import { useThemeMode } from "../../shared/hooks/useThemeMode";
+import { useThemeMode } from "@hooks/useThemeMode";
 
 interface Props extends PropsWithChildren {}
 
@@ -17,7 +17,7 @@ const ThemeSettings: FC<Props> = ({ children }) => {
         }
 
         fetchData();
-    }, [getModeFromStorage]);
+    }, []);
 
     return <>{children}</>;
 };

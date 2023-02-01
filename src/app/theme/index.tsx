@@ -12,13 +12,15 @@ const theme = createTheme({
         primary: "#000000",
         secondary: "#9E9E9E",
         background: "#E1F5FE",
-        black: "#01579B",
+        oppositeToBackground: "#01579B",
+        backBackground: "#f2f9fc",
     },
     darkColors: {
         primary: "#F5F5F5",
         secondary: "#BDBDBD",
         background: "#1A237E",
-        black: "#E8EAF6",
+        oppositeToBackground: "#E8EAF6",
+        backBackground: "#1A237E",
     },
     mode: Appearance.getColorScheme() || "light",
 });

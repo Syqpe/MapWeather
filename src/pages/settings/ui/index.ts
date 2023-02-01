@@ -1,1 +1,1 @@
-export * from "./BreedRow";
+export * from "./SettingsSection";
