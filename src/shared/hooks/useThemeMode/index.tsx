@@ -31,10 +31,6 @@ const useThemeMode = (): Return => {
         );
 
         if (modeFromStorage) {
-            console.log(
-                "getModeFromStorage",
-                modeFromStorage,
-            );
             setMode(modeFromStorage as ThemeMode);
         } else {
             console.error("App could not get theme.");

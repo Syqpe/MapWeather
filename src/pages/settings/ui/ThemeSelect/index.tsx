@@ -1,45 +1,54 @@
 import { useState, FC } from "react";
-import { View, ButtonGroup } from "react-native";
-import { ListItem, Text } from "@rneui/themed";
+import {
+    ButtonGroup,
+    ThemeMode,
+    useTheme,
+} from "@rneui/themed";
+
+import { useThemeMode } from "@hooks/index";
+import { Appearance } from "react-native";
+
+const getThemeIndex = (mode: ThemeMode) => {
+    switch (mode) {
+        case "dark":
+            return 1;
+        case "light":
+            return 2;
+        default:
+            return 0;
+    }
+};
+
+const themeArr = ["default", "dark", "light"];
 
 const ThemeSelect: FC = function ({}) {
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const { theme } = useTheme();
+    const { mode, setMode } = useThemeMode();
+
+    const [selectedIndex, setSelectedIndex] = useState(
+        getThemeIndex(mode),
+    );
+
     return (
         <ButtonGroup
-            buttons={["dark", "light", "default"]}
+            selectedButtonStyle={{
+                backgroundColor: theme.colors.highlight,
+            }}
+            containerStyle={{
+                marginVertical: 14,
+                borderRadius: 14,
+            }}
+            buttons={themeArr}
             selectedIndex={selectedIndex}
-            onPress={value => {
-                setSelectedIndex(value);
+            onPress={(i: number) => {
+                setMode(
+                    i
+                        ? (themeArr[i] as ThemeMode)
+                        : (Appearance.getColorScheme() as ThemeMode),
+                );
+                setSelectedIndex(i);
             }}
         />
-        // <ListItem>
-        //     <ListItem.Content>
-        //         <ListItem.Title>{"1"}</ListItem.Title>
-        //     </ListItem.Content>
-        //     <ListItem.Chevron />
-        // </ListItem>
-        // <>
-        //     <View>
-        //         <Text>123</Text>
-        //     </View>
-        //     {[
-        //         {
-        //             title: "dark",
-        //         },
-        //         {
-        //             title: "light",
-        //         },
-        //     ].map((l, i) => (
-        //         <ListItem key={i}>
-        //             <ListItem.Content>
-        //                 <ListItem.Title>
-        //                     {l.title}
-        //                 </ListItem.Title>
-        //             </ListItem.Content>
-        //             <ListItem.Chevron />
-        //         </ListItem>
-        //     ))}
-        // </>
     );
 };
 

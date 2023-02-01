@@ -10,6 +10,7 @@ import { ThemeSettings } from "./ThemeSettings";
 const theme = createTheme({
     lightColors: {
         primary: "#000000",
+        highlight: "green",
         secondary: "#9E9E9E",
         background: "#E1F5FE",
         oppositeToBackground: "#01579B",
@@ -17,10 +18,11 @@ const theme = createTheme({
     },
     darkColors: {
         primary: "#F5F5F5",
+        highlight: "green",
         secondary: "#BDBDBD",
         background: "#1A237E",
         oppositeToBackground: "#E8EAF6",
-        backBackground: "#1A237E",
+        backBackground: "#474e97",
     },
     mode: Appearance.getColorScheme() || "light",
 });

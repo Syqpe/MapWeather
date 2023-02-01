@@ -6,7 +6,6 @@ import {
     useTheme,
     Icon,
     makeStyles,
-    ListItem,
 } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback } from "react";
@@ -71,100 +70,29 @@ const Settings: FC = function (props) {
                 onChangeText={handleChangeText}
                 value={searchText}
             />
-            <View style={styles.main}>
+            <View>
                 <SettingsSection
                     searchText={searchText}
                     items={[
                         {
+                            title: "Theme",
                             render: <ThemeSelect />,
                         },
                         {
                             title: "Notifications",
                             iconName:
                                 "notifications-outline",
+                            onPress: () => {
+                                console.log("1");
+                            },
                         },
                         {
                             title: "Sounds",
                             iconName:
                                 "musical-notes-outline",
-                        },
-                    ]}
-                />
-            </View>
-            <View style={styles.main}>
-                <SettingsSection
-                    searchText={searchText}
-                    items={[
-                        {
-                            title: "Theme",
-                            iconName:
-                                "color-palette-outline",
-                            children: [
-                                {
-                                    title: "dark",
-                                },
-                                {
-                                    title: "light",
-                                },
-                            ].map((l, i) => (
-                                <ListItem key={i}>
-                                    <ListItem.Content>
-                                        <ListItem.Title>
-                                            {l.title}
-                                        </ListItem.Title>
-                                    </ListItem.Content>
-                                    <ListItem.Chevron />
-                                </ListItem>
-                            )),
-                        },
-                        {
-                            title: "Notifications",
-                            iconName:
-                                "notifications-outline",
-                        },
-                        {
-                            title: "Sounds",
-                            iconName:
-                                "musical-notes-outline",
-                        },
-                    ]}
-                />
-            </View>
-            <View style={styles.main}>
-                <SettingsSection
-                    searchText={searchText}
-                    items={[
-                        {
-                            title: "Theme",
-                            iconName:
-                                "color-palette-outline",
-                            children: [
-                                {
-                                    title: "dark",
-                                },
-                                {
-                                    title: "light",
-                                },
-                            ].map((l, i) => (
-                                <ListItem key={i}>
-                                    <ListItem.Content>
-                                        <ListItem.Title>
-                                            {l.title}
-                                        </ListItem.Title>
-                                    </ListItem.Content>
-                                    <ListItem.Chevron />
-                                </ListItem>
-                            )),
-                        },
-                        {
-                            title: "Notifications",
-                            iconName:
-                                "notifications-outline",
-                        },
-                        {
-                            title: "Sounds",
-                            iconName:
-                                "musical-notes-outline",
+                            onPress: () => {
+                                console.log("2");
+                            },
                         },
                     ]}
                 />
@@ -181,14 +109,6 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: 20,
         paddingLeft: 30,
         paddingRight: 30,
-    },
-
-    main: {
-        backgroundColor: theme.colors.background,
-        paddingHorizontal: 20,
-        paddingVertical: 4,
-        borderRadius: 20,
-        marginBottom: 20,
     },
 }));
 
