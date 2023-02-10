@@ -6,8 +6,8 @@ import {
 } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const Home = lazy(() => import("./home"));
-const Settings = lazy(() => import("./settings"));
+import Home from "./home";
+const SettingsNavigation = lazy(() => import("./settings"));
 
 const Tab = createBottomTabNavigator();
 
@@ -35,6 +35,7 @@ const Navigation = () => {
             }}
         >
             <Tab.Navigator
+                initialRouteName={Routes.Home}
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({
                         focused,
@@ -85,7 +86,7 @@ const Navigation = () => {
                 />
                 <Tab.Screen
                     name={Routes.Settings}
-                    component={Settings}
+                    component={SettingsNavigation}
                     options={{ headerShown: false }}
                 />
             </Tab.Navigator>
