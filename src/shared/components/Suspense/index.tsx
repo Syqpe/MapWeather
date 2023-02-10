@@ -1,14 +1,10 @@
-import { Suspense as ReactSuspense, FC, ReactNode } from "react";
-import { cn } from "@utils/";
+import {
+    Suspense as ReactSuspense,
+    FC,
+    ReactNode,
+} from "react";
 
-import { LoadingOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
-
-import "./index.scss";
-
-const b = cn("spin");
-
-const antIcon = <LoadingOutlined style={{ fontSize: 74 }} spin />;
+import { Icon } from "@rneui/themed";
 
 interface Props {
     children: ReactNode;
@@ -17,11 +13,7 @@ interface Props {
 export const Suspense: FC<Props> = function ({ children }) {
     return (
         <ReactSuspense
-            fallback={
-                <div className={b()}>
-                    <Spin indicator={antIcon} />
-                </div>
-            }
+            fallback={<Icon type={""} name={"loading"} />}
         >
             {children}
         </ReactSuspense>
