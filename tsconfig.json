@@ -13,6 +13,7 @@
       "isolatedModules": true,
       "noEmit": true,
       "paths": {
+          "@assets/*": ["./src/shared/assets/*"],
           "@components/*": ["./src/shared/components/*"],
           "@hooks/*": ["./src/shared/hooks/*"],
           "@localtypes/*": ["./src/shared/types/*"],
