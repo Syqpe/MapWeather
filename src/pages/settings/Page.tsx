@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState, useCallback, FC } from "react";
 import { View } from "react-native";
 import {
     Text,
@@ -8,15 +8,20 @@ import {
     makeStyles,
 } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useCallback } from "react";
 
 import { SettingsSection } from "./ui";
 import { ThemeSelect } from "./ui/ThemeSelect";
 
-const Settings: FC = function (props) {
+interface Props {
+    navigation: any;
+}
+
+const Settings: FC<Props> = function (props) {
+    const { navigation } = props;
+
     const styles = useStyles(props);
-    const { theme } = useTheme();
     const insets = useSafeAreaInsets();
+    const { theme } = useTheme();
 
     const [searchText, setSearchText] = useState("");
 
@@ -83,7 +88,9 @@ const Settings: FC = function (props) {
                             iconName:
                                 "notifications-outline",
                             onPress: () => {
-                                console.log("1");
+                                navigation.navigate(
+                                    "Notifications",
+                                );
                             },
                         },
                         {
@@ -91,7 +98,9 @@ const Settings: FC = function (props) {
                             iconName:
                                 "musical-notes-outline",
                             onPress: () => {
-                                console.log("2");
+                                navigation.navigate(
+                                    "Sounds",
+                                );
                             },
                         },
                     ]}

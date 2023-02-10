@@ -1,3 +1,3 @@
-import { Settings } from "./Page";
+import { SettingsNavigation } from "./Navigation";
 
-export default Settings;
+export default SettingsNavigation;
