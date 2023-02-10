@@ -1,15 +1,23 @@
-import { AxiosRequestConfig, RawAxiosRequestHeaders } from "axios";
+import {
+    AxiosRequestConfig,
+    RawAxiosRequestHeaders,
+} from "axios";
 
-import { FetchInterface, ResponseInterface } from "@localtypes/*";
+import {
+    FetchInterface,
+    ResponseInterface,
+} from "@localtypes/index";
 import { APIError } from "./errors";
 import { API } from "./configs/axios-config";
 
-const DEFAULT_HEADERS: HeadersInit = {
+const DEFAULT_HEADERS: HeadersInit_ = {
     "Content-Type": "application/json",
     Accept: "application/json",
 };
 
-async function handleErrorResponse<T>(response: FetchInterface<T>) {
+async function handleErrorResponse<T>(
+    response: FetchInterface<T>,
+) {
     const { status } = response;
 
     let data;
@@ -26,12 +34,34 @@ async function handleErrorResponse<T>(response: FetchInterface<T>) {
     throw new APIError({ code, status, message });
 }
 
-async function fetch<T>(path: string, options: AxiosRequestConfig = {}): Promise<ResponseInterface<T>> {
-    const { method = "GET", headers = {}, ...restOptions } = options;
+async function fetch<T>(
+    path: string,
+    options: AxiosRequestConfig = {},
+): Promise<ResponseInterface<T>> {
+    const {
+        method = "GET",
+        headers = {},
+        ...restOptions
+    } = options;
 
     if (method !== "GET") {
         headers["x-csrf-token"] = "ops_csrf";
     }
+
+    const paramsStartIndex = path.indexOf("?");
+
+    const params = path
+        .slice(paramsStartIndex + 1)
+        .split("&")
+        .reduce((paramsObj, str) => {
+            const [key = "", value] = str.split("=");
+
+            paramsObj[key] = value;
+
+            return paramsObj;
+        }, {} as Record<string, string>);
+
+    path = path.slice(0, paramsStartIndex);
 
     const response: FetchInterface<T> = await API(path, {
         headers: {
@@ -39,6 +69,7 @@ async function fetch<T>(path: string, options: AxiosRequestConfig = {}): Promise
             ...headers,
         } as RawAxiosRequestHeaders,
         method,
+        params,
         ...restOptions,
     });
 
