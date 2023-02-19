@@ -83,7 +83,6 @@ const Map: FC<Props> = function ({
         region: Region,
         _: Details,
     ) => {
-        console.log(region);
         saveCurrLocation(region);
 
         setMapRegion(region);

@@ -9,12 +9,6 @@ interface Props {
 }
 
 const Notifacations: FC<Props> = function (props) {
-    const { navigation } = props;
-
-    const navigationState = navigation.getState();
-
-    console.log(navigationState);
-
     const styles = useStyles(props);
     const { theme } = useTheme();
     const insets = useSafeAreaInsets();
