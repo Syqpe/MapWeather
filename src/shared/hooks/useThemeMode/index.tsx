@@ -4,13 +4,13 @@ import {
 } from "@rneui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { MODE_KEY } from "@utils/index";
+
 interface Return {
     mode: ThemeMode;
     setMode: (colorMode: ThemeMode) => Promise<void>;
     getModeFromStorage: () => Promise<void>;
 }
-
-const modeKey = "@mode";
 
 const useThemeMode = (): Return => {
     const { mode, setMode: setModeLocal } =
@@ -18,7 +18,7 @@ const useThemeMode = (): Return => {
 
     const setMode = async (colorMode: ThemeMode) => {
         await AsyncStorage.setItem(
-            modeKey,
+            MODE_KEY,
             String(colorMode),
         );
 
@@ -27,7 +27,7 @@ const useThemeMode = (): Return => {
 
     const getModeFromStorage = async () => {
         const modeFromStorage = await AsyncStorage.getItem(
-            modeKey,
+            MODE_KEY,
         );
 
         if (modeFromStorage) {

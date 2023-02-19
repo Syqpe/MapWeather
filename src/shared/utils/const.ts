@@ -1,3 +1,7 @@
+export const MY_LOCATION_MAP_KEY = "@mylocationmap";
+export const MY_LOCATION_BTN_KEY = "@mylocationbtn";
+export const MODE_KEY = "@mode";
+
 export const INPUT_RANGE_START = 0;
 export const INPUT_RANGE_END = 1;
 export const OUTPUT_RANGE_START = -281;
