@@ -1,17 +1,13 @@
 import React, { useState, useEffect, FC } from "react";
 import { View } from "react-native";
-import {
-    makeStyles,
-    useTheme,
-    Button,
-} from "@rneui/themed";
+import { makeStyles, useTheme } from "@rneui/themed";
 import Geolocation, {
     GeolocationResponse,
 } from "@react-native-community/geolocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Region } from "react-native-maps";
 
-import { Input, Icon } from "@components/index";
+import { Input, Icon, Button } from "@components/index";
 import {
     MY_LOCATION_BTN_KEY,
     MY_LOCATION_MAP_KEY,
