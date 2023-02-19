@@ -1,4 +1,4 @@
-import { useState, FC, ReactNode } from "react";
+import React, { useState, FC, ReactNode } from "react";
 import { GestureResponderEvent } from "react-native";
 import { Icon, ListItem } from "@rneui/themed";
 
@@ -33,7 +33,11 @@ const SettingsSectionItem: FC<Props> = function ({
 
     const getItemContent = (() => (
         <>
-            <Icon type="ionicon" name={iconName} />
+            <Icon
+                type="ionicon"
+                name={iconName}
+                style={{ marginRight: 6 }}
+            />
             <ListItem.Content>
                 <ListItem.Title>{title}</ListItem.Title>
             </ListItem.Content>

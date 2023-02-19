@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { useEffect, FC } from "react";
 import { useTheme } from "@rneui/themed";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -29,17 +29,18 @@ const SettingsNavigation: FC<Props> = ({ navigation }) => {
     const { theme } = useTheme();
 
     const navigationState = navigation.getState();
-    console.log(navigationState);
 
-    if (navigationState.state?.index > 0) {
-        navigation.setOptions({
-            tabBarVisible: false,
-        });
-    } else {
-        navigation.setOptions({
-            tabBarVisible: true,
-        });
-    }
+    useEffect(() => {
+        if (navigationState.state?.index > 0) {
+            navigation.setOptions({
+                tabBarVisible: false,
+            });
+        } else {
+            navigation.setOptions({
+                tabBarVisible: true,
+            });
+        }
+    }, [navigation, navigationState.state?.index]);
 
     return (
         <Stack.Navigator
