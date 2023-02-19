@@ -114,7 +114,6 @@ const FindMe: FC<Props> = function ({
                             type="materialicons"
                             name="location-pin"
                             size={22}
-                            color={theme.colors.primary}
                         />
                     }
                 />
@@ -128,7 +127,6 @@ const FindMe: FC<Props> = function ({
                             : "location-searching"
                     }
                     size={22}
-                    color={theme.colors.primary}
                 />
             </Button>
         </View>
