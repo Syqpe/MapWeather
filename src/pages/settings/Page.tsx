@@ -2,13 +2,13 @@ import React, { useState, useCallback, FC } from "react";
 import { View } from "react-native";
 import {
     Text,
-    Input,
     useTheme,
     Icon,
     makeStyles,
 } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { Input } from "@components/index";
 import { SettingsSection } from "./ui";
 import { ThemeSelect } from "./ui/ThemeSelect";
 
@@ -58,23 +58,29 @@ const Settings: FC<Props> = function (props) {
             >
                 Settings
             </Text>
-            <Input
-                placeholder="Search"
-                placeholderTextColor={
-                    theme.colors.secondary
-                }
-                style={{ color: theme.colors.primary }}
-                leftIcon={
-                    <Icon
-                        type="ionicon"
-                        name="search"
-                        size={18}
-                        color={theme.colors.secondary}
-                    />
-                }
-                onChangeText={handleChangeText}
-                value={searchText}
-            />
+
+            <View style={styles.search}>
+                <Input
+                    placeholder="Search"
+                    placeholderTextColor={
+                        theme.colors.secondary
+                    }
+                    style={{
+                        color: theme.colors.primary,
+                    }}
+                    leftIcon={
+                        <Icon
+                            type="ionicon"
+                            name="search"
+                            size={22}
+                            color={theme.colors.secondary}
+                        />
+                    }
+                    onChangeText={handleChangeText}
+                    value={searchText}
+                />
+            </View>
+
             <View>
                 <SettingsSection
                     searchText={searchText}
@@ -118,6 +124,12 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: 20,
         paddingLeft: 30,
         paddingRight: 30,
+    },
+    search: {
+        backgroundColor: theme.colors.background,
+        borderRadius: 12,
+        height: 40,
+        marginVertical: 10,
     },
 }));
 
