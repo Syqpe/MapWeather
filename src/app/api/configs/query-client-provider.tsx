@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import {
     QueryClient,
     QueryClientProvider as RQQueryClientProvider,
@@ -10,12 +10,17 @@ import { fetch } from "../fetch";
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            queryFn: async ({ queryKey, signal }) => {
+            queryFn: async ({
+                queryKey,
+                signal,
+                meta = {},
+            }) => {
                 const data = await fetch<{}>(
                     `${queryKey[0]}`,
                     {
                         signal,
                     },
+                    meta,
                 );
 
                 return data;

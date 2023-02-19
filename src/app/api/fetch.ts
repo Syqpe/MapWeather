@@ -2,13 +2,17 @@ import {
     AxiosRequestConfig,
     RawAxiosRequestHeaders,
 } from "axios";
+import { QueryMeta } from "react-query";
 
 import {
     FetchInterface,
     ResponseInterface,
 } from "@localtypes/index";
 import { APIError } from "./errors";
-import { API } from "./configs/axios-config";
+import {
+    WEATHERAPI,
+    GOOGLEAPI,
+} from "./configs/axios-config";
 
 const DEFAULT_HEADERS: HeadersInit_ = {
     "Content-Type": "application/json",
@@ -34,9 +38,24 @@ async function handleErrorResponse<T>(
     throw new APIError({ code, status, message });
 }
 
+type MetaType = QueryMeta & {
+    type?: "weatherapi" | "googleapi";
+};
+
+function getRequestAPI(meta: MetaType) {
+    switch (meta.type) {
+        case "googleapi":
+            return GOOGLEAPI;
+        case "weatherapi":
+        default:
+            return WEATHERAPI;
+    }
+}
+
 async function fetch<T>(
     path: string,
     options: AxiosRequestConfig = {},
+    meta: MetaType,
 ): Promise<ResponseInterface<T>> {
     const {
         method = "GET",
@@ -63,15 +82,20 @@ async function fetch<T>(
 
     path = path.slice(0, paramsStartIndex);
 
-    const response: FetchInterface<T> = await API(path, {
-        headers: {
-            ...DEFAULT_HEADERS,
-            ...headers,
-        } as RawAxiosRequestHeaders,
-        method,
-        params,
-        ...restOptions,
-    });
+    const RequestAPI = getRequestAPI(meta);
+
+    const response: FetchInterface<T> = await RequestAPI(
+        path,
+        {
+            headers: {
+                ...DEFAULT_HEADERS,
+                ...headers,
+            } as RawAxiosRequestHeaders,
+            method,
+            params,
+            ...restOptions,
+        },
+    );
 
     if (!response.data) {
         await handleErrorResponse<T>(response);
