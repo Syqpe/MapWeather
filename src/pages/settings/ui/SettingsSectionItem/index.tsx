@@ -1,6 +1,8 @@
 import React, { useState, FC, ReactNode } from "react";
 import { GestureResponderEvent } from "react-native";
-import { Icon, ListItem } from "@rneui/themed";
+import { ListItem } from "@rneui/themed";
+
+import { Icon } from "@components/index";
 
 type IItemElement = ReactNode;
 

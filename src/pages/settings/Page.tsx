@@ -1,9 +1,9 @@
 import React, { useState, useCallback, FC } from "react";
 import { View } from "react-native";
-import { useTheme, Icon, makeStyles } from "@rneui/themed";
+import { useTheme, makeStyles } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Input, Text } from "@components/index";
+import { Input, Text, Icon } from "@components/index";
 import { SettingsSection } from "./ui";
 import { ThemeSelect } from "./ui/ThemeSelect";
 

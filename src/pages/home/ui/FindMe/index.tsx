@@ -3,7 +3,6 @@ import { View } from "react-native";
 import {
     makeStyles,
     useTheme,
-    Icon,
     Button,
 } from "@rneui/themed";
 import Geolocation, {
@@ -12,7 +11,7 @@ import Geolocation, {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Region } from "react-native-maps";
 
-import { Input } from "@components/index";
+import { Input, Icon } from "@components/index";
 import {
     MY_LOCATION_BTN_KEY,
     MY_LOCATION_MAP_KEY,

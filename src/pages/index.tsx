@@ -1,10 +1,12 @@
 import React, { lazy } from "react";
-import { Icon, useTheme } from "@rneui/themed";
+import { useTheme } from "@rneui/themed";
 import {
     NavigationContainer,
     DefaultTheme,
 } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+import { Icon } from "@components/index";
 
 import Home from "./home";
 const SettingsNavigation = lazy(() => import("./settings"));

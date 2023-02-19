@@ -4,7 +4,7 @@ import React, {
     ReactNode,
 } from "react";
 
-import { Icon } from "@rneui/themed";
+import { Icon } from "@components/index";
 
 interface Props {
     children: ReactNode;
