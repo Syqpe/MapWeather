@@ -102,4 +102,4 @@ const Navigation = () => {
     );
 };
 
-export { Navigation };
+export { Navigation, Routes };

@@ -6,15 +6,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Input, Text, Icon } from "@components/index";
 import { SettingsSection } from "./ui";
 import { ThemeSelect } from "./ui/ThemeSelect";
+import { TopPanel } from "@widgets/top-panel/index";
+import { Routes } from "../index";
 
 interface Props {
     navigation: any;
 }
 
-const Settings: FC<Props> = function (props) {
-    const { navigation } = props;
-
-    const styles = useStyles(props);
+const Settings: FC<Props> = function ({ navigation }) {
+    const styles = useStyles();
     const insets = useSafeAreaInsets();
     const { theme } = useTheme();
 
@@ -44,6 +44,12 @@ const Settings: FC<Props> = function (props) {
                 },
             ]}
         >
+            <TopPanel
+                isBackNavigation
+                navigation={navigation}
+                routeName={Routes.Settings}
+            />
+
             <Text h3 bold>
                 Settings
             </Text>

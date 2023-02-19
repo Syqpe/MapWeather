@@ -4,13 +4,15 @@ import { makeStyles } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text } from "@components/index";
+import { TopPanel } from "@widgets/top-panel/index";
+import { Routes } from "@pages/index";
 
 interface Props {
     navigation: any;
 }
 
-const Sounds: FC<Props> = function (props) {
-    const styles = useStyles(props);
+const Sounds: FC<Props> = function ({ navigation }) {
+    const styles = useStyles();
     const insets = useSafeAreaInsets();
 
     return (
@@ -33,6 +35,12 @@ const Sounds: FC<Props> = function (props) {
                 },
             ]}
         >
+            <TopPanel
+                isBackNavigation
+                navigation={navigation}
+                routeName={Routes.Settings}
+            />
+
             <Text h3 bold>
                 Sounds
             </Text>

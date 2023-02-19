@@ -8,12 +8,14 @@ import { Region } from "react-native-maps";
 
 import { FindMe, Map } from "./ui";
 import { Text } from "@components/index";
+import { TopPanel } from "@widgets/top-panel/index";
+import { Routes } from "../index";
 
 interface Props {
     navigation: any;
 }
 
-const Home: FC<Props> = function ({}) {
+const Home: FC<Props> = function ({ navigation }) {
     const styles = useStyles();
     const insets = useSafeAreaInsets();
     const { theme } = useTheme();
@@ -49,6 +51,12 @@ const Home: FC<Props> = function ({}) {
                 },
             ]}
         >
+            <TopPanel
+                iconName="settings-outline"
+                navigation={navigation}
+                routeName={Routes.Settings}
+            />
+
             <Text h3 bold>
                 Weather Map
             </Text>

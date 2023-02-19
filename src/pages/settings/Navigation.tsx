@@ -60,10 +60,12 @@ const SettingsNavigation: FC<Props> = ({ navigation }) => {
             <Stack.Screen
                 name={Routes.Notifications}
                 component={Notifacations}
+                options={{ headerShown: false }}
             />
             <Stack.Screen
                 name={Routes.Sounds}
                 component={Sounds}
+                options={{ headerShown: false }}
             />
         </Stack.Navigator>
     );
