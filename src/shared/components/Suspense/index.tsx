@@ -1,4 +1,4 @@
-import {
+import React, {
     Suspense as ReactSuspense,
     FC,
     ReactNode,
