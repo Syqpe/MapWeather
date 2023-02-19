@@ -16,6 +16,9 @@ module.exports = {
                 ],
                 alias: [
                     {
+                        "@widgets": "./src/widgets",
+                    },
+                    {
                         "@assets": "./src/shared/assets",
                     },
                     {
