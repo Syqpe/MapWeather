@@ -27,7 +27,8 @@ const TopPanel: FC<Props> = function ({
         if (isBackNavigation) {
             navigation?.goBack?.();
         } else {
-            navigation?.navigate?.(routeName);
+            // Stack.Navigation can push the route
+            navigation?.push?.(routeName);
         }
     };
 
