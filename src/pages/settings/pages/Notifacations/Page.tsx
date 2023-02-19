@@ -1,7 +1,9 @@
 import React, { FC } from "react";
 import { View } from "react-native";
-import { Text, useTheme, makeStyles } from "@rneui/themed";
+import { makeStyles } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { Text } from "@components/index";
 
 interface Props {
     navigation: any;
@@ -10,7 +12,6 @@ interface Props {
 
 const Notifacations: FC<Props> = function (props) {
     const styles = useStyles(props);
-    const { theme } = useTheme();
     const insets = useSafeAreaInsets();
 
     return (
@@ -33,13 +34,7 @@ const Notifacations: FC<Props> = function (props) {
                 },
             ]}
         >
-            <Text
-                h3
-                style={{
-                    color: theme.colors.primary,
-                    fontWeight: "bold",
-                }}
-            >
+            <Text h3 bold>
                 Notifacations
             </Text>
         </View>

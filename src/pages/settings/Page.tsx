@@ -1,14 +1,9 @@
 import React, { useState, useCallback, FC } from "react";
 import { View } from "react-native";
-import {
-    Text,
-    useTheme,
-    Icon,
-    makeStyles,
-} from "@rneui/themed";
+import { useTheme, Icon, makeStyles } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Input } from "@components/index";
+import { Input, Text } from "@components/index";
 import { SettingsSection } from "./ui";
 import { ThemeSelect } from "./ui/ThemeSelect";
 
@@ -49,13 +44,7 @@ const Settings: FC<Props> = function (props) {
                 },
             ]}
         >
-            <Text
-                h3
-                style={{
-                    color: theme.colors.primary,
-                    fontWeight: "bold",
-                }}
-            >
+            <Text h3 bold>
                 Settings
             </Text>
 

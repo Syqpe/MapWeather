@@ -82,12 +82,18 @@ const Navigation = () => {
                 <Tab.Screen
                     name={Routes.Home}
                     component={Home}
-                    options={{ headerShown: false }}
+                    options={{
+                        headerShown: false,
+                        tabBarStyle: { display: "none" },
+                    }}
                 />
                 <Tab.Screen
                     name={Routes.Settings}
                     component={SettingsNavigation}
-                    options={{ headerShown: false }}
+                    options={{
+                        headerShown: false,
+                        tabBarStyle: { display: "none" },
+                    }}
                 />
             </Tab.Navigator>
         </NavigationContainer>

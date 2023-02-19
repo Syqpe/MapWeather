@@ -1,12 +1,13 @@
 import React, { useState, FC } from "react";
 import { View } from "react-native";
-import { makeStyles, useTheme, Text } from "@rneui/themed";
+import { makeStyles, useTheme } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useQuery } from "react-query";
 import { GeolocationResponse } from "@react-native-community/geolocation";
 import { Region } from "react-native-maps";
 
 import { FindMe, Map } from "./ui";
+import { Text } from "@components/index";
 
 interface Props {
     navigation: any;
@@ -21,11 +22,11 @@ const Home: FC<Props> = function ({}) {
         staleTime: 60 * 1000 * 10, // 5min
     });
 
-    // Общий позишин между кнопкой и картой
-    // кнопка -> карта
+    // Позиция по кнопке
     const [btnPositon, setBtnPosition] =
         useState<GeolocationResponse>();
 
+    // Позиция по карте
     const [mapRegion, setMapRegion] = useState<Region>();
 
     return (
@@ -48,13 +49,7 @@ const Home: FC<Props> = function ({}) {
                 },
             ]}
         >
-            <Text
-                h3
-                style={{
-                    color: theme.colors.primary,
-                    fontWeight: "bold",
-                }}
-            >
+            <Text h3 bold>
                 Weather Map
             </Text>
 
