@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, FC, useEffect } from "react";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { makeStyles } from "@rneui/themed";
 import { GeolocationResponse } from "@react-native-community/geolocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,12 +10,15 @@ import MapView, {
 } from "react-native-maps";
 
 import { MY_LOCATION_MAP_KEY } from "@utils/index";
+import { Routes } from "@pages/index";
+import { Icon } from "@components/index";
 
 interface Props {
     btnPositon: GeolocationResponse | undefined;
     setMapRegion: React.Dispatch<
         React.SetStateAction<Region | undefined>
     >;
+    navigation: any;
 }
 
 const MAP_CONFIG = {
@@ -28,6 +31,7 @@ const MAP_CONFIG = {
 const Map: FC<Props> = function ({
     btnPositon,
     setMapRegion,
+    navigation,
 }) {
     const styles = useStyles();
 
@@ -88,33 +92,53 @@ const Map: FC<Props> = function ({
         setMapRegion(region);
     };
 
+    const handlePress = () => {
+        navigation.push(Routes.Weather);
+    };
+
     return (
         <View style={[styles.container]}>
-            <MapView
-                ref={mapRef}
-                showsUserLocation
-                showsCompass
-                zoomEnabled
-                zoomControlEnabled
-                showsTraffic
-                style={styles.map}
-                onRegionChangeComplete={
-                    handleonRegionChangeComplete
-                }
-            />
+            <View style={[styles.map_container]}>
+                <MapView
+                    style={styles.map}
+                    ref={mapRef}
+                    showsUserLocation
+                    showsCompass
+                    zoomEnabled
+                    zoomControlEnabled
+                    showsTraffic
+                    onRegionChangeComplete={
+                        handleonRegionChangeComplete
+                    }
+                />
+
+                <View style={[styles.map_cover]} />
+                <TouchableOpacity
+                    style={styles.map_action}
+                    onPress={handlePress}
+                >
+                    <Icon
+                        type="ionicon"
+                        name="map-outline"
+                        size={38}
+                        color={"#fff"}
+                    />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
 
-const useStyles = makeStyles(theme => ({
-    container: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: theme.colors.background,
+const useStyles = makeStyles(() => ({
+    container: {},
+
+    map_container: {
         borderRadius: 12,
         overflow: "hidden",
         position: "relative",
+        zIndex: 1,
         height: 160,
+        marginBottom: 4,
     },
 
     map: {
@@ -123,6 +147,25 @@ const useStyles = makeStyles(theme => ({
         top: 0,
         bottom: 0,
         position: "absolute",
+        zIndex: 1,
+    },
+    map_cover: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        position: "absolute",
+        zIndex: 2,
+        opacity: 0.5,
+        backgroundColor: "#000",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    map_action: {
+        flex: 1,
+        zIndex: 3,
+        justifyContent: "center",
+        alignItems: "center",
     },
 }));
 

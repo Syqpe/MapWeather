@@ -7,7 +7,7 @@ import { Input, Text, Icon } from "@components/index";
 import { SettingsSection } from "./ui";
 import { ThemeSelect } from "./ui/ThemeSelect";
 import { TopPanel } from "@widgets/top-panel/index";
-import { Routes } from "../index";
+import { Routes } from "@pages/index";
 
 interface Props {
     navigation: any;
