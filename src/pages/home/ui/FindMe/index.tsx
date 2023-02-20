@@ -45,6 +45,7 @@ const FindMe: FC<Props> = function ({
     const styles = useStyles();
     const { theme } = useTheme();
 
+    const [text, setText] = useState<string>("");
     const [suggestItems, setSuggestItems] = useState<
         Array<ISuggestItem>
     >([]);
@@ -100,10 +101,10 @@ const FindMe: FC<Props> = function ({
         );
     };
 
-    const getSuggestItems = (text: string) => {
+    const getSuggestItems = (localText: string) => {
         fetch<Array<ISuggestItem>>("/search.json", {
             params: {
-                q: text,
+                q: localText,
             },
         }).then(data => {
             setSuggestItems(
@@ -112,11 +113,13 @@ const FindMe: FC<Props> = function ({
         });
     };
 
-    const handleChangeText = (text: string) => {
+    const handleChangeText = (localText: string) => {
+        setText(localText);
+
         clearTimeout(timer || 0);
 
         const localTimer = setTimeout(() => {
-            getSuggestItems(text);
+            getSuggestItems(localText);
         }, 600);
 
         setTimer(localTimer);
@@ -153,6 +156,7 @@ const FindMe: FC<Props> = function ({
             longitude: suggestItem.lon,
         } as Region);
 
+        setText("");
         setSuggestItems([]);
 
         navigation.push(Routes.Weather);
@@ -175,6 +179,7 @@ const FindMe: FC<Props> = function ({
                                 size={22}
                             />
                         }
+                        value={text}
                         onChangeText={handleChangeText}
                     />
                 </View>
