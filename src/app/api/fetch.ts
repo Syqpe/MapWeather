@@ -55,11 +55,12 @@ function getRequestAPI(meta: MetaType) {
 async function fetch<T>(
     path: string,
     options: AxiosRequestConfig = {},
-    meta: MetaType,
+    meta?: MetaType,
 ): Promise<ResponseInterface<T>> {
     const {
         method = "GET",
         headers = {},
+        params,
         ...restOptions
     } = options;
 
@@ -67,22 +68,30 @@ async function fetch<T>(
         headers["x-csrf-token"] = "ops_csrf";
     }
 
+    let localParams = params;
+
+    // If path include ?something=...&...
     const paramsStartIndex = path.indexOf("?");
+    if (paramsStartIndex > 0) {
+        localParams = {
+            ...path
+                .slice(paramsStartIndex + 1)
+                .split("&")
+                .reduce((paramsObj, str) => {
+                    const [key = "", value] =
+                        str.split("=");
 
-    const params = path
-        .slice(paramsStartIndex + 1)
-        .split("&")
-        .reduce((paramsObj, str) => {
-            const [key = "", value] = str.split("=");
+                    paramsObj[key] = value;
 
-            paramsObj[key] = value;
+                    return paramsObj;
+                }, {} as Record<string, string>),
+            ...localParams,
+        };
 
-            return paramsObj;
-        }, {} as Record<string, string>);
+        path = path.slice(0, paramsStartIndex + 1);
+    }
 
-    path = path.slice(0, paramsStartIndex);
-
-    const RequestAPI = getRequestAPI(meta);
+    const RequestAPI = getRequestAPI(meta || {});
 
     const response: FetchInterface<T> = await RequestAPI(
         path,
@@ -92,7 +101,7 @@ async function fetch<T>(
                 ...headers,
             } as RawAxiosRequestHeaders,
             method,
-            params,
+            params: localParams,
             ...restOptions,
         },
     );
