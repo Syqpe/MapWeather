@@ -60,7 +60,7 @@ async function fetch<T>(
     const {
         method = "GET",
         headers = {},
-        params,
+        params = {},
         ...restOptions
     } = options;
 
@@ -96,15 +96,17 @@ async function fetch<T>(
     const response: FetchInterface<T> = await RequestAPI(
         path,
         {
+            method,
+            params: localParams,
             headers: {
                 ...DEFAULT_HEADERS,
                 ...headers,
             } as RawAxiosRequestHeaders,
-            method,
-            params: localParams,
             ...restOptions,
         },
     );
+
+    console.log(response);
 
     if (!response.data) {
         await handleErrorResponse<T>(response);
