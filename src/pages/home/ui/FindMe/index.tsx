@@ -1,50 +1,72 @@
 import React, { useState, useEffect, FC } from "react";
-import { View } from "react-native";
-import { makeStyles, useTheme } from "@rneui/themed";
+import { TouchableHighlight, View } from "react-native";
+import {
+    ListItem,
+    makeStyles,
+    useTheme,
+} from "@rneui/themed";
 import Geolocation, {
     GeolocationResponse,
 } from "@react-native-community/geolocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Region } from "react-native-maps";
+import { fetch } from "@API";
 
 import { Input, Icon, Button } from "@components/index";
 import {
     MY_LOCATION_BTN_KEY,
     MY_LOCATION_MAP_KEY,
 } from "@utils/index";
+import { Routes } from "@pages/index";
+
+interface ISuggestItem {
+    id: number;
+    name: string;
+    region: string;
+    country: string;
+    lat: number;
+    lon: number;
+    url: string;
+}
 
 interface Props {
-    mapRegion?: Region;
-    setBtnPosition: React.Dispatch<
-        React.SetStateAction<
-            GeolocationResponse | undefined
-        >
+    region?: Region;
+    setRegion: React.Dispatch<
+        React.SetStateAction<Region | undefined>
     >;
+    navigation: any;
 }
 
 const FindMe: FC<Props> = function ({
-    mapRegion,
-    setBtnPosition,
+    region,
+    setRegion,
+    navigation,
 }) {
     const styles = useStyles();
     const { theme } = useTheme();
 
+    const [suggestItems, setSuggestItems] = useState<
+        Array<ISuggestItem>
+    >([]);
+    const [timer, setTimer] = useState<number>();
     const [onMyLocation, setOnMyLocation] = useState(false);
 
-    const checkMyLocation = async (region?: Region) => {
+    const checkMyLocation = async (
+        localRegion?: Region,
+    ) => {
         const position: GeolocationResponse =
             await AsyncStorage.getItem(
                 MY_LOCATION_BTN_KEY,
             ).then(data => JSON.parse(data || ""));
 
         if (
-            region &&
+            localRegion &&
             Math.abs(
-                +region?.latitude.toFixed(5) -
+                +localRegion?.latitude.toFixed(5) -
                     +position?.coords.latitude.toFixed(5),
             ) === 0 &&
             Math.abs(
-                +region?.longitude.toFixed(5) -
+                +localRegion?.longitude.toFixed(5) -
                     +position?.coords.longitude.toFixed(5),
             ) === 0
         ) {
@@ -56,18 +78,18 @@ const FindMe: FC<Props> = function ({
 
     useEffect(() => {
         (async () => {
-            const region: Region =
+            const localRegion: Region =
                 await AsyncStorage.getItem(
                     MY_LOCATION_MAP_KEY,
                 ).then(data => JSON.parse(data || ""));
 
-            checkMyLocation(region);
+            checkMyLocation(localRegion);
         })();
     }, []);
 
     useEffect(() => {
-        checkMyLocation(mapRegion);
-    }, [mapRegion]);
+        checkMyLocation(region);
+    }, [region]);
 
     const saveCurrLocation = async (
         position: GeolocationResponse,
@@ -78,14 +100,41 @@ const FindMe: FC<Props> = function ({
         );
     };
 
+    const getSuggestItems = (text: string) => {
+        fetch<Array<ISuggestItem>>("/search.json", {
+            params: {
+                q: text,
+            },
+        }).then(data => {
+            setSuggestItems(
+                data as unknown as Array<ISuggestItem>,
+            );
+        });
+    };
+
+    const handleChangeText = (text: string) => {
+        clearTimeout(timer || 0);
+
+        const localTimer = setTimeout(() => {
+            getSuggestItems(text);
+        }, 600);
+
+        setTimer(localTimer);
+    };
+
     const handlePress = () => {
         setOnMyLocation(true);
 
         Geolocation.getCurrentPosition(
             position => {
-                setBtnPosition(position);
+                setRegion({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                } as Region);
 
                 saveCurrLocation(position);
+
+                navigation.push(Routes.Weather);
             },
             error => console.log(error.message),
             {
@@ -96,56 +145,107 @@ const FindMe: FC<Props> = function ({
         );
     };
 
+    const handleSuggestItemPress = (
+        suggestItem: ISuggestItem,
+    ) => {
+        setRegion({
+            latitude: suggestItem.lat,
+            longitude: suggestItem.lon,
+        } as Region);
+
+        setSuggestItems([]);
+
+        navigation.push(Routes.Weather);
+    };
+
     return (
         <View style={styles.container}>
-            <View style={styles.locationContainer}>
-                <Input
-                    style={styles.locationInput}
-                    placeholder="Search for a city"
-                    placeholderTextColor={
-                        theme.colors.primary
-                    }
-                    leftIcon={
-                        <Icon
-                            type="materialicons"
-                            name="location-pin"
-                            size={22}
-                        />
-                    }
-                />
+            <View style={styles.search_container}>
+                <View style={styles.location_container}>
+                    <Input
+                        style={styles.location_input}
+                        placeholder="Search for a city"
+                        placeholderTextColor={
+                            theme.colors.primary
+                        }
+                        leftIcon={
+                            <Icon
+                                type="materialicons"
+                                name="location-pin"
+                                size={22}
+                            />
+                        }
+                        onChangeText={handleChangeText}
+                    />
+                </View>
+                <Button type="clear" onPress={handlePress}>
+                    <Icon
+                        type="materialicons"
+                        name={
+                            onMyLocation
+                                ? "my-location"
+                                : "location-searching"
+                        }
+                        size={22}
+                    />
+                </Button>
             </View>
-            <Button type="clear" onPress={handlePress}>
-                <Icon
-                    type="materialicons"
-                    name={
-                        onMyLocation
-                            ? "my-location"
-                            : "location-searching"
-                    }
-                    size={22}
-                />
-            </Button>
+
+            <View style={styles.suggest_container}>
+                {suggestItems.map((suggestItem, i) => (
+                    <TouchableHighlight
+                        onPress={() =>
+                            handleSuggestItemPress(
+                                suggestItem,
+                            )
+                        }
+                        key={i}
+                    >
+                        <ListItem>
+                            <ListItem.Content>
+                                <ListItem.Title>
+                                    {suggestItem.name}
+                                </ListItem.Title>
+                                <ListItem.Subtitle>
+                                    {suggestItem.country}
+                                </ListItem.Subtitle>
+                            </ListItem.Content>
+                        </ListItem>
+                    </TouchableHighlight>
+                ))}
+            </View>
         </View>
     );
 };
 
 const useStyles = makeStyles(theme => ({
     container: {
+        position: "relative",
+    },
+
+    search_container: {
         flexDirection: "row",
         alignItems: "center",
         backgroundColor: theme.colors.background,
         borderRadius: 12,
     },
 
-    locationContainer: {
-        flex: 1,
-    },
-    locationInput: {
-        color: theme.colors.primary,
+    suggest_container: {
+        // position: "absolute",
+        // top: "100%",
+        // left: 0,
+        // right: 0,
+        backgroundColor: "green",
+        height: 400,
+        borderBottomEndRadius: 16,
+        borderBottomStartRadius: 16,
     },
 
-    locationBtn: {
-        marginLeft: 10,
+    location_container: {
+        flex: 1,
+    },
+    location_input: {
+        color: theme.colors.primary,
     },
 }));
 

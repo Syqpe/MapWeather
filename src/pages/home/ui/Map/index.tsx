@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef, FC, useEffect } from "react";
+import React, { useEffect, useRef, FC } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { makeStyles } from "@rneui/themed";
-import { GeolocationResponse } from "@react-native-community/geolocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MapView, {
     Details,
@@ -14,8 +13,8 @@ import { Routes } from "@pages/index";
 import { Icon } from "@components/index";
 
 interface Props {
-    btnPositon: GeolocationResponse | undefined;
-    setMapRegion: React.Dispatch<
+    region: Region | undefined;
+    setRegion: React.Dispatch<
         React.SetStateAction<Region | undefined>
     >;
     navigation: any;
@@ -29,18 +28,20 @@ const MAP_CONFIG = {
 };
 
 const Map: FC<Props> = function ({
-    btnPositon,
-    setMapRegion,
+    region,
+    setRegion,
     navigation,
 }) {
     const styles = useStyles();
 
     const mapRef = useRef<MapView>(null);
 
-    const saveCurrLocation = async (region: Region) => {
+    const saveCurrLocation = async (
+        localRegion: Region,
+    ) => {
         await AsyncStorage.setItem(
             MY_LOCATION_MAP_KEY,
-            JSON.stringify(region),
+            JSON.stringify(localRegion),
         );
     };
 
@@ -48,23 +49,23 @@ const Map: FC<Props> = function ({
     useEffect(() => {
         if (mapRef?.current) {
             (async () => {
-                const region: Region =
+                const localRegion: Region =
                     await AsyncStorage.getItem(
                         MY_LOCATION_MAP_KEY,
                     ).then(data => JSON.parse(data || ""));
 
                 mapRef?.current?.animateToRegion({
                     latitude:
-                        region?.latitude ||
+                        localRegion?.latitude ||
                         MAP_CONFIG.latitude,
                     longitude:
-                        region?.longitude ||
+                        localRegion?.longitude ||
                         MAP_CONFIG.longitude,
                     latitudeDelta:
-                        region?.latitudeDelta ||
+                        localRegion?.latitudeDelta ||
                         MAP_CONFIG.latitudeDelta,
                     longitudeDelta:
-                        region?.longitudeDelta ||
+                        localRegion?.longitudeDelta ||
                         MAP_CONFIG.longitudeDelta,
                 } as Region);
             })();
@@ -74,22 +75,18 @@ const Map: FC<Props> = function ({
     // Когда юзер устанавливает нажимает "Текущее положение"
     useEffect(() => {
         mapRef?.current?.animateToRegion({
-            latitude:
-                btnPositon?.coords.latitude ||
-                MAP_CONFIG.latitude,
-            longitude:
-                btnPositon?.coords.longitude ||
-                MAP_CONFIG.longitude,
+            latitude: region?.latitude,
+            longitude: region?.longitude,
         } as Region);
-    }, [btnPositon]);
+    }, [region]);
 
     const handleonRegionChangeComplete = (
-        region: Region,
+        localRegion: Region,
         _: Details,
     ) => {
-        saveCurrLocation(region);
+        saveCurrLocation(localRegion);
 
-        setMapRegion(region);
+        setRegion(localRegion);
     };
 
     const handlePress = () => {
