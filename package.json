@@ -5,6 +5,7 @@
         "android": "react-native run-android",
         "ios": "react-native run-ios",
         "start": "react-native start",
+        "start:reset_cache": "npm start -- --reset-cache",
         "test": "jest",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "devtools": "react-devtools"
