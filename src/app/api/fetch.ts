@@ -106,8 +106,6 @@ async function fetch<T>(
         },
     );
 
-    console.log(response);
-
     if (!response.data) {
         await handleErrorResponse<T>(response);
     }
