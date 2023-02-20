@@ -1,15 +1,13 @@
 import React, { useState, FC } from "react";
 import { View } from "react-native";
-import { makeStyles, useTheme } from "@rneui/themed";
+import { makeStyles } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useQuery } from "react-query";
-import { GeolocationResponse } from "@react-native-community/geolocation";
 import { Region } from "react-native-maps";
 
-import { FindMe, Map } from "./ui";
+import { FindMe, Map, Places } from "./ui";
 import { Text } from "@components/index";
 import { TopPanel } from "@widgets/top-panel/index";
-import { Routes } from "../index";
+import { Routes } from "@pages/index";
 
 interface Props {
     navigation: any;
@@ -18,18 +16,9 @@ interface Props {
 const Home: FC<Props> = function ({ navigation }) {
     const styles = useStyles();
     const insets = useSafeAreaInsets();
-    const { theme } = useTheme();
 
-    const { status, data } = useQuery("?q=London&aqi=no", {
-        staleTime: 60 * 1000 * 10, // 5min
-    });
-
-    // Позиция по кнопке
-    const [btnPositon, setBtnPosition] =
-        useState<GeolocationResponse>();
-
-    // Позиция по карте
-    const [mapRegion, setMapRegion] = useState<Region>();
+    // Позиция
+    const [region, setRegion] = useState<Region>();
 
     return (
         <View
@@ -58,20 +47,30 @@ const Home: FC<Props> = function ({ navigation }) {
             />
 
             <Text h3 bold>
-                Weather Map
+                Weather
             </Text>
 
             <View style={styles.findme}>
                 <FindMe
-                    mapRegion={mapRegion}
-                    setBtnPosition={setBtnPosition}
+                    navigation={navigation}
+                    region={region}
+                    setRegion={setRegion}
                 />
             </View>
 
             <View style={styles.map}>
                 <Map
-                    btnPositon={btnPositon}
-                    setMapRegion={setMapRegion}
+                    navigation={navigation}
+                    region={region}
+                    setRegion={setRegion}
+                />
+            </View>
+
+            <View style={styles.places}>
+                <Places
+                    navigation={navigation}
+                    region={region}
+                    setRegion={setRegion}
                 />
             </View>
         </View>
@@ -92,6 +91,7 @@ const useStyles = makeStyles(theme => ({
         marginVertical: 10,
     },
     map: {},
+    places: {},
 }));
 
 export { Home };
