@@ -1,8 +1,7 @@
-import React, { useState, FC } from "react";
+import React, { FC } from "react";
 import { View } from "react-native";
 import { makeStyles } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Region } from "react-native-maps";
 
 import { FindMe, Map, Places } from "./ui";
 import { Text } from "@components/index";
@@ -16,9 +15,6 @@ interface Props {
 const Home: FC<Props> = function ({ navigation }) {
     const styles = useStyles();
     const insets = useSafeAreaInsets();
-
-    // Позиция
-    const [region, setRegion] = useState<Region>();
 
     return (
         <View
@@ -51,27 +47,15 @@ const Home: FC<Props> = function ({ navigation }) {
             </Text>
 
             <View style={styles.findme}>
-                <FindMe
-                    navigation={navigation}
-                    region={region}
-                    setRegion={setRegion}
-                />
+                <FindMe navigation={navigation} />
             </View>
 
             <View style={styles.map}>
-                <Map
-                    navigation={navigation}
-                    region={region}
-                    setRegion={setRegion}
-                />
+                <Map navigation={navigation} />
             </View>
 
             <View style={styles.places}>
-                <Places
-                    navigation={navigation}
-                    region={region}
-                    setRegion={setRegion}
-                />
+                <Places navigation={navigation} />
             </View>
         </View>
     );

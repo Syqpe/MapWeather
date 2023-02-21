@@ -18,6 +18,14 @@ import {
     MY_LOCATION_MAP_KEY,
 } from "@utils/index";
 import { Routes } from "@pages/index";
+import {
+    useAppDispatch,
+    useAppSelector,
+} from "@hooks/index";
+import {
+    selectCurrentRegion,
+    setCurrentRegion,
+} from "@app/store/reducers/mapSlice";
 
 interface ISuggestItem {
     id: number;
@@ -30,20 +38,18 @@ interface ISuggestItem {
 }
 
 interface Props {
-    region?: Region;
-    setRegion: React.Dispatch<
-        React.SetStateAction<Region | undefined>
-    >;
     navigation: any;
 }
 
-const FindMe: FC<Props> = function ({
-    region,
-    setRegion,
-    navigation,
-}) {
+const FindMe: FC<Props> = function ({ navigation }) {
+    const dispatch = useAppDispatch();
+
     const styles = useStyles();
     const { theme } = useTheme();
+
+    const currentRegion: Region = useAppSelector(
+        selectCurrentRegion,
+    );
 
     const [text, setText] = useState<string>("");
     const [suggestItems, setSuggestItems] = useState<
@@ -89,8 +95,8 @@ const FindMe: FC<Props> = function ({
     }, []);
 
     useEffect(() => {
-        checkMyLocation(region);
-    }, [region]);
+        checkMyLocation(currentRegion);
+    }, [currentRegion]);
 
     const saveCurrLocation = async (
         position: GeolocationResponse,
@@ -130,10 +136,13 @@ const FindMe: FC<Props> = function ({
 
         Geolocation.getCurrentPosition(
             position => {
-                setRegion({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                } as Region);
+                dispatch(
+                    setCurrentRegion({
+                        latitude: position.coords.latitude,
+                        longitude:
+                            position.coords.longitude,
+                    } as Region),
+                );
 
                 saveCurrLocation(position);
 
@@ -151,10 +160,12 @@ const FindMe: FC<Props> = function ({
     const handleSuggestItemPress = (
         suggestItem: ISuggestItem,
     ) => {
-        setRegion({
-            latitude: suggestItem.lat,
-            longitude: suggestItem.lon,
-        } as Region);
+        dispatch(
+            setCurrentRegion({
+                latitude: suggestItem.lat,
+                longitude: suggestItem.lon,
+            } as Region),
+        );
 
         setText("");
         setSuggestItems([]);

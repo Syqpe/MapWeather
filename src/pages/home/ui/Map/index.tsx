@@ -15,30 +15,27 @@ import MapView, {
 import { MY_LOCATION_MAP_KEY } from "@utils/index";
 import { Routes } from "@pages/index";
 import { Icon } from "@components/index";
+import {
+    useAppDispatch,
+    useAppSelector,
+} from "@hooks/index";
+import {
+    selectCurrentRegion,
+    setCurrentRegion,
+} from "@app/store/reducers/mapSlice";
 
 interface Props {
-    region: Region | undefined;
-    setRegion: React.Dispatch<
-        React.SetStateAction<Region | undefined>
-    >;
     navigation: any;
 }
 
-const MAP_CONFIG = {
-    latitude: 12,
-    longitude: 12,
-    latitudeDelta: 0.0022,
-    longitudeDelta: 0.0221,
-};
-
-const Map: FC<Props> = function ({
-    region,
-    setRegion,
-    navigation,
-}) {
+const Map: FC<Props> = function ({ navigation }) {
+    const dispatch = useAppDispatch();
     const styles = useStyles();
 
     const mapRef = useRef<MapView>(null);
+    const currentRegion: Region = useAppSelector(
+        selectCurrentRegion,
+    );
 
     const saveCurrLocation = async (
         localRegion: Region,
@@ -59,18 +56,12 @@ const Map: FC<Props> = function ({
                     ).then(data => JSON.parse(data || ""));
 
                 mapRef?.current?.animateToRegion({
-                    latitude:
-                        localRegion?.latitude ||
-                        MAP_CONFIG.latitude,
-                    longitude:
-                        localRegion?.longitude ||
-                        MAP_CONFIG.longitude,
+                    latitude: localRegion?.latitude,
+                    longitude: localRegion?.longitude,
                     latitudeDelta:
-                        localRegion?.latitudeDelta ||
-                        MAP_CONFIG.latitudeDelta,
+                        localRegion?.latitudeDelta,
                     longitudeDelta:
-                        localRegion?.longitudeDelta ||
-                        MAP_CONFIG.longitudeDelta,
+                        localRegion?.longitudeDelta,
                 } as Region);
             })();
         }
@@ -79,10 +70,10 @@ const Map: FC<Props> = function ({
     // Когда юзер устанавливает нажимает "Текущее положение"
     useEffect(() => {
         mapRef?.current?.animateToRegion({
-            latitude: region?.latitude,
-            longitude: region?.longitude,
+            latitude: currentRegion.latitude,
+            longitude: currentRegion.longitude,
         } as Region);
-    }, [region]);
+    }, [currentRegion]);
 
     const handleonRegionChangeComplete = (
         localRegion: Region,
@@ -90,7 +81,7 @@ const Map: FC<Props> = function ({
     ) => {
         saveCurrLocation(localRegion);
 
-        setRegion(localRegion);
+        dispatch(setCurrentRegion(localRegion));
     };
 
     const handlePress = () => {
