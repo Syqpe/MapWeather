@@ -1,4 +1,4 @@
-import { useEffect, useRef, FC } from "react";
+import React, { useEffect, useRef, FC } from "react";
 import {
     Animated,
     Easing,

@@ -1,4 +1,4 @@
-import { useState, FC } from "react";
+import React, { useState, FC } from "react";
 import {
     ButtonGroup,
     ThemeMode,
@@ -36,7 +36,7 @@ const ThemeSelect: FC = function ({}) {
             }}
             containerStyle={{
                 marginVertical: 14,
-                borderRadius: 14,
+                borderRadius: 8,
             }}
             buttons={themeArr}
             selectedIndex={selectedIndex}
