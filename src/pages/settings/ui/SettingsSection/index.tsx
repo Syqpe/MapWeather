@@ -28,12 +28,7 @@ const SettingsSection: FC<Props> = function ({
         <View style={styles.section}>
             {filteredItems.map((item, i) => (
                 <Fragment key={i}>
-                    <SettingsSectionItem
-                        item={item}
-                        bottomDivider={
-                            filteredItems.length - 1 !== i
-                        }
-                    />
+                    <SettingsSectionItem item={item} />
                 </Fragment>
             ))}
         </View>
@@ -43,10 +38,9 @@ const SettingsSection: FC<Props> = function ({
 const useStyles = makeStyles(theme => ({
     section: {
         backgroundColor: theme.colors.background,
-        paddingHorizontal: 20,
-        paddingVertical: 4,
-        borderRadius: 20,
-        marginBottom: 20,
+        borderRadius: 10,
+        marginBottom: 10,
+        overflow: "hidden",
     },
 }));
 

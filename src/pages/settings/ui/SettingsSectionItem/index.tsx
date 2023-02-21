@@ -1,5 +1,8 @@
 import React, { useState, FC, ReactNode } from "react";
-import { GestureResponderEvent } from "react-native";
+import {
+    GestureResponderEvent,
+    TouchableOpacity,
+} from "react-native";
 import { ListItem } from "@rneui/themed";
 
 import { Icon } from "@components/index";
@@ -50,23 +53,29 @@ const SettingsSectionItem: FC<Props> = function ({
         return <>{render}</>;
     }
 
-    return isChildrenExist ? (
-        <ListItem.Accordion
-            isExpanded={expanded}
-            onPress={() => {
-                setExpanded(!expanded);
-            }}
-            content={getItemContent}
+    return (
+        <TouchableOpacity
+            onPress={
+                isChildrenExist
+                    ? () => {
+                          setExpanded(!expanded);
+                      }
+                    : onPress
+            }
         >
-            {children}
-        </ListItem.Accordion>
-    ) : (
-        <ListItem
-            onPress={onPress}
-            bottomDivider={bottomDivider}
-        >
-            {getItemContent}
-        </ListItem>
+            {isChildrenExist ? (
+                <ListItem.Accordion
+                    isExpanded={expanded}
+                    content={getItemContent}
+                >
+                    {children}
+                </ListItem.Accordion>
+            ) : (
+                <ListItem bottomDivider={bottomDivider}>
+                    {getItemContent}
+                </ListItem>
+            )}
+        </TouchableOpacity>
     );
 };
 
