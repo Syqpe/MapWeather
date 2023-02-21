@@ -196,37 +196,39 @@ const FindMe: FC<Props> = function ({
                 </Button>
             </View>
 
-            <View style={styles.suggest_container}>
-                {suggestItems.map((suggestItem, i) => (
-                    <TouchableHighlight
-                        onPress={() =>
-                            handleSuggestItemPress(
-                                suggestItem,
-                            )
-                        }
-                        key={i}
-                    >
-                        <ListItem>
-                            <ListItem.Content>
-                                <ListItem.Title>
-                                    {suggestItem.name}
-                                </ListItem.Title>
-                                <ListItem.Subtitle>
-                                    {suggestItem.country}
-                                </ListItem.Subtitle>
-                            </ListItem.Content>
-                        </ListItem>
-                    </TouchableHighlight>
-                ))}
-            </View>
+            {suggestItems.length ? (
+                <View style={styles.suggest_container}>
+                    {suggestItems.map((suggestItem, i) => (
+                        <TouchableHighlight
+                            onPress={() =>
+                                handleSuggestItemPress(
+                                    suggestItem,
+                                )
+                            }
+                            key={i}
+                        >
+                            <ListItem>
+                                <ListItem.Content>
+                                    <ListItem.Title>
+                                        {suggestItem.name}
+                                    </ListItem.Title>
+                                    <ListItem.Subtitle>
+                                        {
+                                            suggestItem.country
+                                        }
+                                    </ListItem.Subtitle>
+                                </ListItem.Content>
+                            </ListItem>
+                        </TouchableHighlight>
+                    ))}
+                </View>
+            ) : null}
         </View>
     );
 };
 
 const useStyles = makeStyles(theme => ({
-    container: {
-        position: "relative",
-    },
+    container: {},
 
     search_container: {
         flexDirection: "row",
@@ -236,14 +238,13 @@ const useStyles = makeStyles(theme => ({
     },
 
     suggest_container: {
-        // position: "absolute",
-        // top: "100%",
-        // left: 0,
-        // right: 0,
-        backgroundColor: "green",
-        height: 400,
+        position: "absolute",
+        top: "100%",
+        left: 0,
+        right: 0,
         borderBottomEndRadius: 16,
         borderBottomStartRadius: 16,
+        zIndex: 99,
     },
 
     location_container: {

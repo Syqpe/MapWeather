@@ -1,6 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, FC } from "react";
-import { TouchableOpacity, View } from "react-native";
+import {
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { makeStyles } from "@rneui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MapView, {
@@ -97,7 +101,7 @@ const Map: FC<Props> = function ({
         <View style={[styles.container]}>
             <View style={[styles.map_container]}>
                 <MapView
-                    style={styles.map}
+                    style={[styles.map]}
                     ref={mapRef}
                     showsUserLocation
                     showsCompass
@@ -109,9 +113,21 @@ const Map: FC<Props> = function ({
                     }
                 />
 
-                <View style={[styles.map_cover]} />
+                <View
+                    style={[
+                        {
+                            ...StyleSheet.absoluteFillObject,
+                        },
+                        styles.map_cover,
+                    ]}
+                />
                 <TouchableOpacity
-                    style={styles.map_action}
+                    style={[
+                        {
+                            ...StyleSheet.absoluteFillObject,
+                        },
+                        styles.map_action,
+                    ]}
                     onPress={handlePress}
                 >
                     <Icon
@@ -132,35 +148,16 @@ const useStyles = makeStyles(() => ({
     map_container: {
         borderRadius: 12,
         overflow: "hidden",
-        position: "relative",
-        zIndex: 1,
-        height: 160,
-        marginBottom: 4,
     },
 
     map: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        position: "absolute",
-        zIndex: 1,
+        height: 160,
     },
     map_cover: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        position: "absolute",
-        zIndex: 2,
         opacity: 0.5,
         backgroundColor: "#000",
-        alignItems: "center",
-        justifyContent: "center",
     },
     map_action: {
-        flex: 1,
-        zIndex: 3,
         justifyContent: "center",
         alignItems: "center",
     },
