@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { useEffect, FC } from "react";
 import { View } from "react-native";
 import { makeStyles } from "@rneui/themed";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,14 +7,32 @@ import { FindMe, Map, Places } from "./ui";
 import { Text } from "@components/index";
 import { TopPanel } from "@widgets/top-panel/index";
 import { Routes } from "@pages/index";
+import { useAppDispatch } from "@hooks/index";
+import { Region } from "react-native-maps";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MY_LOCATION_MAP_KEY } from "@utils/index";
+import { setCurrentRegion } from "@app/store/reducers/mapSlice";
 
 interface Props {
     navigation: any;
 }
 
 const Home: FC<Props> = function ({ navigation }) {
+    const dispatch = useAppDispatch();
+
     const styles = useStyles();
     const insets = useSafeAreaInsets();
+
+    useEffect(() => {
+        (async () => {
+            const localRegion: Region =
+                await AsyncStorage.getItem(
+                    MY_LOCATION_MAP_KEY,
+                ).then(data => JSON.parse(data || ""));
+
+            dispatch(setCurrentRegion(localRegion));
+        })();
+    }, [dispatch]);
 
     return (
         <View
