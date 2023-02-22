@@ -9,33 +9,25 @@ import Geolocation, {
     GeolocationResponse,
 } from "@react-native-community/geolocation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Region } from "react-native-maps";
 import { fetch } from "@API";
 
 import { Input, Icon, Button } from "@components/index";
-import {
-    MY_LOCATION_BTN_KEY,
-    MY_LOCATION_MAP_KEY,
-} from "@utils/index";
+import { MY_LOCATION_BTN_KEY } from "@utils/index";
 import { Routes } from "@pages/index";
 import {
     useAppDispatch,
     useAppSelector,
 } from "@hooks/index";
 import {
+    addRegion,
     selectCurrentRegion,
     setCurrentRegion,
 } from "@app/store/reducers/mapSlice";
-
-interface ISuggestItem {
-    id: number;
-    name: string;
-    region: string;
-    country: string;
-    lat: number;
-    lon: number;
-    url: string;
-}
+import {
+    ISuggestItem,
+    Region,
+    isSuccessResponse,
+} from "@localtypes/index";
 
 interface Props {
     navigation: any;
@@ -84,17 +76,6 @@ const FindMe: FC<Props> = function ({ navigation }) {
     };
 
     useEffect(() => {
-        (async () => {
-            const localRegion: Region =
-                await AsyncStorage.getItem(
-                    MY_LOCATION_MAP_KEY,
-                ).then(data => JSON.parse(data || ""));
-
-            checkMyLocation(localRegion);
-        })();
-    }, []);
-
-    useEffect(() => {
         checkMyLocation(currentRegion);
     }, [currentRegion]);
 
@@ -113,12 +94,13 @@ const FindMe: FC<Props> = function ({ navigation }) {
                 q: localText,
             },
         }).then(data => {
-            setSuggestItems(
-                data as unknown as Array<ISuggestItem>,
-            );
+            if (isSuccessResponse(data)) {
+                setSuggestItems(data);
+            }
         });
     };
 
+    // * Поиск гео-локации
     const handleChangeText = (localText: string) => {
         setText(localText);
 
@@ -131,18 +113,35 @@ const FindMe: FC<Props> = function ({ navigation }) {
         setTimer(localTimer);
     };
 
-    const handlePress = () => {
+    // * Нажатие на поиск моей гео-локации
+    const handleGetMyLocationPress = () => {
         setOnMyLocation(true);
 
         Geolocation.getCurrentPosition(
-            position => {
-                dispatch(
-                    setCurrentRegion({
-                        latitude: position.coords.latitude,
-                        longitude:
-                            position.coords.longitude,
-                    } as Region),
-                );
+            async position => {
+                const region: Region = {
+                    latitude: 0,
+                    longitude: 0,
+                };
+
+                await fetch<Array<ISuggestItem>>(
+                    "/search.json",
+                    {
+                        params: {
+                            q: `${position.coords.latitude},${position.coords.longitude}`,
+                        },
+                    },
+                ).then(data => {
+                    if (isSuccessResponse(data)) {
+                        region.name = data[0].name;
+                        region.country = data[0].country;
+                        region.region = data[0].region;
+                    }
+                });
+
+                dispatch(addRegion(region));
+
+                dispatch(setCurrentRegion(region));
 
                 saveCurrLocation(position);
 
@@ -157,15 +156,22 @@ const FindMe: FC<Props> = function ({ navigation }) {
         );
     };
 
+    // * Нажатие на саджест
     const handleSuggestItemPress = (
         suggestItem: ISuggestItem,
     ) => {
-        dispatch(
-            setCurrentRegion({
-                latitude: suggestItem.lat,
-                longitude: suggestItem.lon,
-            } as Region),
-        );
+        const region: Region = {
+            latitude: suggestItem.lat,
+            longitude: suggestItem.lon,
+
+            name: suggestItem.name,
+            country: suggestItem.country,
+            region: suggestItem.region,
+        };
+
+        dispatch(addRegion(region));
+
+        dispatch(setCurrentRegion(region));
 
         setText("");
         setSuggestItems([]);
@@ -194,7 +200,10 @@ const FindMe: FC<Props> = function ({ navigation }) {
                         onChangeText={handleChangeText}
                     />
                 </View>
-                <Button type="clear" onPress={handlePress}>
+                <Button
+                    type="clear"
+                    onPress={handleGetMyLocationPress}
+                >
                     <Icon
                         type="materialicons"
                         name={

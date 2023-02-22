@@ -6,23 +6,19 @@ import {
     View,
 } from "react-native";
 import { makeStyles } from "@rneui/themed";
+import MapView from "react-native-maps";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import MapView, {
-    Details,
-    Region,
-} from "react-native-maps";
 
-import { MY_LOCATION_MAP_KEY } from "@utils/index";
+import { useAppDispatch } from "@hooks/index";
 import { Routes } from "@pages/index";
+import { MY_LOCATION_MAP_KEY } from "@utils/index";
 import { Icon } from "@components/index";
+import { useAppSelector } from "@hooks/index";
 import {
-    useAppDispatch,
-    useAppSelector,
-} from "@hooks/index";
-import {
+    addRegion,
     selectCurrentRegion,
-    setCurrentRegion,
 } from "@app/store/reducers/mapSlice";
+import { Region } from "@localtypes/index";
 
 interface Props {
     navigation: any;
@@ -46,45 +42,28 @@ const Map: FC<Props> = function ({ navigation }) {
         );
     };
 
-    // При 1 входе, показываем сохраненные данные
-    useEffect(() => {
-        if (mapRef?.current) {
-            (async () => {
-                const localRegion: Region =
-                    await AsyncStorage.getItem(
-                        MY_LOCATION_MAP_KEY,
-                    ).then(data => JSON.parse(data || ""));
-
-                mapRef?.current?.animateToRegion({
-                    latitude: localRegion?.latitude,
-                    longitude: localRegion?.longitude,
-                    latitudeDelta:
-                        localRegion?.latitudeDelta,
-                    longitudeDelta:
-                        localRegion?.longitudeDelta,
-                } as Region);
-            })();
-        }
-    }, [mapRef]);
-
     // Когда юзер устанавливает нажимает "Текущее положение"
     useEffect(() => {
         mapRef?.current?.animateToRegion({
-            latitude: currentRegion.latitude,
-            longitude: currentRegion.longitude,
-        } as Region);
+            latitude: currentRegion?.latitude,
+            longitude: currentRegion?.longitude,
+            latitudeDelta:
+                currentRegion?.latitudeDelta || 0,
+            longitudeDelta:
+                currentRegion?.longitudeDelta || 0,
+        });
     }, [currentRegion]);
 
+    // * Функция для сохранения положения карты
     const handleonRegionChangeComplete = (
         localRegion: Region,
-        _: Details,
     ) => {
         saveCurrLocation(localRegion);
-
-        dispatch(setCurrentRegion(localRegion));
     };
 
     const handlePress = () => {
+        dispatch(addRegion(currentRegion));
+
         navigation.push(Routes.Weather);
     };
 
@@ -93,6 +72,16 @@ const Map: FC<Props> = function ({ navigation }) {
             <View style={[styles.map_container]}>
                 <MapView
                     style={[styles.map]}
+                    initialRegion={{
+                        latitude: currentRegion?.latitude,
+                        longitude: currentRegion?.longitude,
+                        latitudeDelta:
+                            currentRegion?.latitudeDelta ||
+                            0,
+                        longitudeDelta:
+                            currentRegion?.longitudeDelta ||
+                            0,
+                    }}
                     ref={mapRef}
                     showsUserLocation
                     showsCompass
