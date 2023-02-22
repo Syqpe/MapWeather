@@ -1,13 +1,12 @@
 interface IAPIError {
-    code: string;
-    status: number;
+    code: number;
     message?: string;
 }
 
 class BaseError extends Error {
-    public readonly code: string;
+    public readonly code: number;
 
-    public constructor(code: string, message?: string) {
+    public constructor(code: number, message?: string) {
         super(message);
         this.code = code;
 
@@ -16,16 +15,16 @@ class BaseError extends Error {
 }
 
 class APIError extends BaseError implements IAPIError {
-    public readonly status: number;
+    public readonly code: number;
 
     public readonly message: string;
 
     public constructor(error: IAPIError) {
-        const { code, status, message } = error;
+        const { code, message } = error;
 
         super(code, message);
 
-        this.status = status;
+        this.code = code;
         this.message = message || "";
     }
 }

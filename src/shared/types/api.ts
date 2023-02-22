@@ -1,29 +1,18 @@
 import { AxiosResponse } from "axios";
 
-enum ResponseStatuses {
-    "success" = "success",
-    "error" = "error",
-    "loading" = "loading",
-}
-
 interface FailResponse {
-    status: ResponseStatuses.error;
-    message: string;
+    error: {
+        code: number;
+        message: string;
+    };
 }
 
-interface SuccessResponse<T> {
-    status: ResponseStatuses.success;
-    message: T;
-}
-
-type ResponseInterface<T> =
-    | SuccessResponse<T>
-    | FailResponse;
+type ResponseInterface<T> = T | FailResponse;
 
 const isSuccessResponse = <T>(
     response: ResponseInterface<T>,
-): response is SuccessResponse<T> => {
-    return !!(response as SuccessResponse<T>).message;
+): response is T => {
+    return !(response as FailResponse).error;
 };
 
 type FetchInterface<T> = AxiosResponse<
@@ -33,7 +22,6 @@ type FetchInterface<T> = AxiosResponse<
 export type {
     FetchInterface,
     ResponseInterface,
-    SuccessResponse,
     FailResponse,
 };
-export { isSuccessResponse, ResponseStatuses };
+export { isSuccessResponse };

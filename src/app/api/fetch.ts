@@ -5,8 +5,10 @@ import {
 import { QueryMeta } from "react-query";
 
 import {
+    FailResponse,
     FetchInterface,
     ResponseInterface,
+    isSuccessResponse,
 } from "@localtypes/index";
 import { APIError } from "./errors";
 import {
@@ -19,23 +21,13 @@ const DEFAULT_HEADERS: HeadersInit_ = {
     Accept: "application/json",
 };
 
-async function handleErrorResponse<T>(
-    response: FetchInterface<T>,
-) {
-    const { status } = response;
+async function handleErrorResponse(response: FailResponse) {
+    const { error } = response;
 
-    let data;
-    let code;
-    let message;
+    let code = error.code || 500;
+    let message = error.message || "Something error!!!";
 
-    try {
-        data = await response.data;
-    } finally {
-        code = (data && data.status) || "500_ISE";
-        message = data && "Something error!!!";
-    }
-
-    throw new APIError({ code, status, message });
+    throw new APIError({ code, message });
 }
 
 type MetaType = QueryMeta & {
@@ -106,8 +98,8 @@ async function fetch<T>(
         },
     );
 
-    if (!response.data) {
-        await handleErrorResponse<T>(response);
+    if (!isSuccessResponse(response.data)) {
+        await handleErrorResponse(response.data);
     }
 
     return response.data;
